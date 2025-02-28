@@ -49,9 +49,9 @@ class EngineCapacity(Vehicle):
         self.enginge = enginePower
 
     def displayInfo(self):        
-        print (f"{category}: {self.brand} {self.model}, Year: {self.year},Engine: {self.enginge} Rental Price: ${self.getDailyRental()}/day.")
+        print (f"{category}: {self.brand} {self.model}, Year: {self.year},Engine: {self.enginge}cc, Rental Price: ${self.getDailyRental()}/day.")
 
-def transportation ():
+def transportation (category):
 
     vehicleDetails = Vehicle(input(f"Enter {category} brand :") ,
                              input(f"Enter {category} model: ") ,
@@ -60,7 +60,7 @@ def transportation ():
     
     return vehicleDetails
 
-def rentalPrice():
+def rentalPrice(vehicleDetails):
         
     numberOfDays = int(input(f"Enter the number of days you wish to rent the {category} for: "))
 
@@ -70,7 +70,7 @@ def rentalPrice():
     return rental
 
 
-def ifCar():
+def ifCar(vehicleDetails):
     numberOfSeats = int(input("Enter the number of seats: "))
 
     newVehicledetails = SeatCapacity (vehicleDetails.brand, vehicleDetails.model, 
@@ -79,8 +79,8 @@ def ifCar():
 
     return newVehicledetails
 
-def ifBike():
-    enginePower = int(input("Enter the engin powe in 'cc': "))
+def ifBike(vehicleDetails):
+    enginePower = int(input("Enter the engine power in 'cc': "))
 
     newVehicledetails = EngineCapacity(vehicleDetails.brand, vehicleDetails.model, 
                         vehicleDetails.year, vehicleDetails.getDailyRental(), 
@@ -98,12 +98,46 @@ def updatedPrice():
 
 
 # # for the code
+vehicleList = []
+
+action = input("Do you wish to enter vehicle details? (yes or no): ")
 
 
+while action == "yes" and action != "no":
+    category = input ("Enter the vehicle type (Car or Bike): ").lower()
+    categories = { 
+        "Type" : category
+    }
+
+    if category == "car" and category != "bike":
+
+        vehicleDetails = transportation(category) 
+        newVehicledetails = ifCar(vehicleDetails)
+        rental = rentalPrice(vehicleDetails)
+
+        categories["Details"] = newVehicledetails
+        categories["Rental"] = rental
+       
+
+    elif category != "car" and category == "bike":
+
+        vehicleDetails = transportation(category)
+        newVehicledetails = ifBike(vehicleDetails)
+        rental = rentalPrice(vehicleDetails)
+
+        categories["Details"] = newVehicledetails
+        categories["Rental"] = rental
+        
+    vehicleList.append(categories)
+
+    action = input("Do you wish to add new vehicle details? (yes or no): ")
 
 
-# for i in range(len(vehicleList)):
-#     print(vehicleList[i])
+for i in range(len(vehicleList)):
+    categories = vehicleList[i]
+    categories["Details"] = newVehicledetails
+    newVehicledetails.displayInfo()
+    print(vehicleList[i])
 
 # rental.calculateRent()
 # rental.displayInfo()
