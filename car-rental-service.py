@@ -4,33 +4,50 @@ class Vehicle:
         self.brand = brand
         self.model = model 
         self.year = year
-        self.dailyRental= dailyRental
+        self.__dailyRental= dailyRental
+
+    def getDailyRental(self):
+        return self.__dailyRental
+
+    def setDailyRental(self, price):
+        if price > 0:
+            self.__dailyRental = price
+        else:
+            return ("Daily rental price must be positive")
+  
 
     def displayInfo(self):        
-        print (f"{category}: {self.brand} {self.model}, Year: {self.year}, Rental Price: ${self.dailyRental}/day.")
+        print (f"{category}: {self.brand} {self.model}, Year: {self.year}, Rental Price: ${self.__dailyRental}/day.")
         
 class RentalCost(Vehicle):
-    # def superMetod(self):
-    #     super().__init__(self)
-    
+
     def __init__ (self, brand, model, year, dailyRental, numberOfDays):
         super().__init__ (brand, model, year, dailyRental)
         self.days = numberOfDays
         self.rentalcost = 0
     
     def calculateRent(self):
-        self.rentalCost = self.dailyRental*self.days
+        self.rentalCost = self.getDailyRental()*self.days
         return self.rentalCost
     
     def displayInfo(self):
         print (f"Rental cost for {self.brand} {self.model} for {numberOfDays} days: $ {self.rentalCost}")
         
+class SeatCapacity(RentalCost):
+    def __init__ (self, brand, model, year, dailyRental, numberOfSeats):
+        super().__init__ (brand, model, year, dailyRental)
+        self.seats = numberOfSeats
 
+    def displayInfo(self):        
+        print (f"{category}: {self.brand} {self.model}, Year: {self.year},Seats: {self.seats} Rental Price: ${self.dailyRental}/day.")
 
+class EngineCapacity(RentalCost):
+    def __init__ (self, brand, model, year, dailyRental, enginePower):
+        super().__init__ (brand, model, year, dailyRental)
+        self.enginge = enginePower
 
-
-
-
+    def displayInfo(self):        
+        print (f"{category}: {self.brand} {self.model}, Year: {self.year},Engine: {self.enginge} Rental Price: ${self.dailyRental}/day.")
 
 # def promt ():
 #     vehicleDetails = Vehicle(input(f"Enter {category} brand :") , input(f"Enter {category} model: "),
@@ -45,8 +62,11 @@ category = input ("Enter the vehicle type: ")
 vehicleDetails = Vehicle(input(f"Enter {category} brand: ") , input(f"Enter {category} model: "), int(input(f"Enter {category} year: ")), float(input(f"Enter {category} daily rental price: $")))
 numberOfDays = int(input("Enter the number of days you wish to rent the car for: "))
 
-rental = RentalCost(vehicleDetails.brand, vehicleDetails.model, vehicleDetails.year, vehicleDetails.dailyRental, numberOfDays)
+rental = RentalCost(vehicleDetails.brand, vehicleDetails.model, vehicleDetails.year, vehicleDetails.getDailyRental(), numberOfDays)
+rental.calculateRent()
+rental.displayInfo()
 
+rental = RentalCost(vehicleDetails.brand, vehicleDetails.model, vehicleDetails.year, vehicleDetails.getDailyRental(), numberOfDays)
 rental.calculateRent()
 rental.displayInfo()
 # numberOfDays.displayInfo()
