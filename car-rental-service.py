@@ -46,10 +46,14 @@ class EngineCapacity(Vehicle):
 
     def __init__ (self, brand, model, year, dailyRental, enginePower):
         super().__init__ (brand, model, year, dailyRental)
-        self.enginge = enginePower
+        self.engine = enginePower
 
     def displayInfo(self,category):        
-        print (f"{category}: {self.brand} {self.model}, Year: {self.year}, Engine: {self.enginge}cc, Rental Price: ${int(self.getDailyRental())}/day.")
+        print (f"{category}: {self.brand} {self.model}, Year: {self.year}, Engine: {self.engine}cc, Rental Price: ${int(self.getDailyRental())}/day.")
+
+
+# Funtions to input and manipulate data
+
 
 def transportation (category):
 
@@ -84,15 +88,15 @@ def ifBike(vehicleDetails,category):
     
     enginePower = int(input(f"Enter the engine power for the {category}in 'cc': "))
 
-    newVehicledetails = EngineCapacity(vehicleDetails.brand, vehicleDetails.model, 
+    newVehicleDetails = EngineCapacity(vehicleDetails.brand, vehicleDetails.model, 
                         vehicleDetails.year, vehicleDetails.getDailyRental(), 
                         enginePower) 
 
-    return newVehicledetails
+    return newVehicleDetails
 
-def updatedPrice():
-
-    updatedRentalPrice = (float(input(f"Enter updated daily rental price: $")))
+def updatedPrice(rental):
+ 
+    updatedRentalPrice = float(input(f"Enter updated daily rental price: $"))
     
     rental.setDailyRental(updatedRentalPrice)
     
@@ -100,7 +104,7 @@ def updatedPrice():
 
 
 
-#  The Code Starts Here.
+                                            #  The Program Starts Here  #
 
 vehicleList = []
 
@@ -118,43 +122,63 @@ while action == "Yes":
     }
     
     if category == "Car":
-            newVehicledetails = ifCar(vehicleDetails,category) 
+            newVehicleDetails = ifCar(vehicleDetails,category) 
 
     elif category == "Bike":
-            newVehicledetails = ifBike(vehicleDetails,category)
+            newVehicleDetails = ifBike(vehicleDetails,category)
        
     
     rental = rentalPrice(vehicleDetails,category)
-    categories["Details"] = newVehicledetails
+    rental.calculateRent()
+    categories["Details"] = newVehicleDetails
     categories["Rental"] = rental
         
     vehicleList.append(categories)
 
     action = input("Do you wish to add new vehicle details? (Yes or No): ").capitalize()
 
+update = input("Do you wish to edit a price? (Yes or No): ").capitalize()
+
+newPrice = {}
+updatedList= []
+while update == "Yes":
+    
+    updatedVehicleBrand = input(f"Enter the vehicle brand you wish update: ").capitalize()
+    updatedVehicleModel = input(f"Enter the vehicle brand you wish update: ").capitalize()
+    for categories in vehicleList:
+        
+        updatedBrand = categories["Details"]
+        
+        if updatedVehicleBrand == updatedBrand.brand and updatedVehicleModel == updatedBrand.model:
+            newPrice = {
+                "Brand" : updatedBrand.brand , 
+                "Model" : updatedBrand.model ,
+                "Updated Price" : updatedPrice(categories['Rental'])}
+            
+            updatedList.append(newPrice)
+
+    update = input("Do you wish to edit a price? (Yes or No)").capitalize()
+   
 
 
+print ("<===========================================================================>\n")
 for categories in vehicleList:
     
     vehicleData = categories["Details"]
     vehicleData.displayInfo(categories["Type"])
 
-print ("\n"*2 )
+print ("\n" )
 
 for categories in vehicleList:
+
     rental = categories["Rental"]
-    rental.calculateRent()
-    rental.displayInfo(categories["Rental"])
+    rental.displayInfo(categories["Type"])
+
+print ('\n')
+
+for index in updatedList:
+        print(f"The Updated rental price for {index['Brand']} {index['Model']} is ${index['Updated Price']}.")
+
+print ("\n<===========================================================================>")   
+
    
-
-# rental.calculateRent()
-# rental.displayInfo()
-
-# rental = RentalCost(vehicleDetails.brand, vehicleDetails.model, vehicleDetails.year, vehicleDetails.getDailyRental(), numberOfDays)
-# rental.calculateRent()
-# rental.displayInfo()
-# # numberOfDays.displayInfo()
-
-# vehicleDetails.displayInfo()
-
-
